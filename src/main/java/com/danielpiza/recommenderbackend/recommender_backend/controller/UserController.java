@@ -22,10 +22,6 @@ public class UserController {
     }
     
     @PostMapping("/register")
-    /*
-    public User registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
-    }*/
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             User savedUser = userService.registerUser(user);
@@ -33,5 +29,10 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{id}")
+    public User getUsers(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 }
