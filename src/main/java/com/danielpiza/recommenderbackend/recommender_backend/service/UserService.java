@@ -29,7 +29,6 @@ public class UserService {
                 throw new Error("Password can't be empty");
             }
 
-            // Generar hash de la contraseña con SHA-256
             String hashedPassword = hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
 
@@ -46,6 +45,30 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
+    public User updateUser(Long id, User updatedUser) {
+        
+        try {
+            User existingUser = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    
+            if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
+                existingUser.setName(updatedUser.getName());
+            }
+            if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+                existingUser.setEmail(updatedUser.getEmail());
+            }
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                String hashedPassword = hashPassword(updatedUser.getPassword());
+                existingUser.setPassword(hashedPassword);
+            }
+            updatedUser.setCreatedDate(existingUser.getCreatedDate());
+            return userRepository.save(existingUser);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating user: " + e.getMessage());
+        }
+        
+    }
+
     public String deleteUserById(Long id) {
         try {
             userRepository.deleteById(id);
@@ -55,7 +78,6 @@ public class UserService {
         }
     }
 
-    // Método para realizar el hash de la contraseña
     private String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -66,7 +88,6 @@ public class UserService {
         }
     }
 
-    // Conversión de bytes a String hexadecimal
     private String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
         for (byte b : bytes) {

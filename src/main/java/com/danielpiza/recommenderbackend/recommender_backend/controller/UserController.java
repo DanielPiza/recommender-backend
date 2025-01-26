@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.danielpiza.recommenderbackend.recommender_backend.model.User;
 import com.danielpiza.recommenderbackend.recommender_backend.service.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -39,5 +43,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable Long id) {
         return userService.deleteUserById(id);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
     }
 }
