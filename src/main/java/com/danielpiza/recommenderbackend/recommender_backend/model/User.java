@@ -3,67 +3,32 @@ package com.danielpiza.recommenderbackend.recommender_backend.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
+    @Getter @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremental
     private Long id;
 
+    @Getter @Setter
     @Column(nullable = false)
     private String name;
 
+    @Getter @Setter
     @Column(nullable = true, unique = true)
     private String email;
 
+    @Getter @Setter
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Getter @Setter
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
-    
-
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
 
 }
