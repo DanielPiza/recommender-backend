@@ -10,14 +10,11 @@ import org.springframework.stereotype.Service;
 import com.danielpiza.recommenderbackend.recommender_backend.model.User;
 import com.danielpiza.recommenderbackend.recommender_backend.repository.UserRepository;
 
-import jakarta.persistence.Entity;
-
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -46,11 +43,20 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
-     // Método para realizar el hash de la contraseña
-     private String hashPassword(String password) {
+    public String deleteUserById(Long id) {
+        try {
+            userRepository.deleteById(id);
+            return "User deleted successfully";
+        } catch (Exception e) {
+            throw new RuntimeException("Error registering user: " + e.getMessage());
+        }
+    }
+
+    // Método para realizar el hash de la contraseña
+    private String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes());
@@ -65,7 +71,8 @@ public class UserService {
         StringBuilder hexString = new StringBuilder();
         for (byte b : bytes) {
             String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
+            if (hex.length() == 1)
+                hexString.append('0');
             hexString.append(hex);
         }
         return hexString.toString();
