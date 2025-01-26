@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.danielpiza.recommenderbackend.recommender_backend.model.User;
 import com.danielpiza.recommenderbackend.recommender_backend.repository.UserRepository;
 
+import jakarta.persistence.Entity;
+
 @Service
 public class UserService {
 
@@ -33,7 +35,7 @@ public class UserService {
             // Generar hash de la contraseña con SHA-256
             String hashedPassword = hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
-            
+
             user.setCreatedDate(LocalDateTime.now());
             return userRepository.save(user);
         } catch (Exception e) {
@@ -43,7 +45,8 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.getReferenceById(id);
+        return userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
      // Método para realizar el hash de la contraseña
